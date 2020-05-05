@@ -53,3 +53,15 @@ class EditCategoryResource(Resource):
             return {'message': 'Category {} updated successfuly'.format(categoryData['Name'])}, 200
         else:
             return {'message': 'There is no Category found'}, 404
+
+class DeleteCategoryResource(Resource):
+    def post(self):
+        categoryData = request.get_json(force=True)
+        category = Category.query.filter_by(id = categoryData['Id']).first()
+
+        if category is not None:
+            db.session.delete(category)
+            db.session.commit()
+            return {'message': 'Category {} deleted successfuly'.format(category.Name)}, 200
+        else:
+            return {'message': 'There is no Category found'}, 404
