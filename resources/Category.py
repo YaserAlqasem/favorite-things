@@ -40,4 +40,16 @@ class CategoriesListResource(Resource):
         if categories:
             return {'status': 'success', 'data': categories}, 200
         else:
-            return {'message': 'There is no categories found'}, 404  
+            return {'message': 'There is no categories found'}, 404
+
+class EditCategoryResource(Resource):
+    def post(self):
+        categoryData = request.get_json(force=True)
+        category = Category.query.filter_by(id = categoryData['Id']).first()
+
+        if category is not None:
+            category.Name = categoryData['Name']
+            db.session.commit()
+            return {'message': 'Category {} updated successfuly'.format(categoryData['Name'])}, 200
+        else:
+            return {'message': 'There is no Category found'}, 404
