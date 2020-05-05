@@ -35,3 +35,12 @@ class AddItemResource(Resource):
                     }
             except:
                 return {'message': 'Something went wrong'}, 500
+
+class ItemsListResource(Resource):
+    def get(self):
+        items = Item.query.all()
+        items = items_schema.dump(items).data
+        if items:
+            return {'status': 'success', 'data': items}, 200
+        else:
+            return {'message': 'There is no items found'}, 404
