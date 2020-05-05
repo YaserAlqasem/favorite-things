@@ -43,9 +43,9 @@ class CategoriesListResource(Resource):
             return {'message': 'There is no categories found'}, 404
 
 class EditCategoryResource(Resource):
-    def post(self):
+    def post(self,categoryid):
         categoryData = request.get_json(force=True)
-        category = Category.query.filter_by(id = categoryData['Id']).first()
+        category = Category.query.filter_by(id = categoryid).first()
 
         if category is not None:
             category.Name = categoryData['Name']
@@ -55,9 +55,9 @@ class EditCategoryResource(Resource):
             return {'message': 'There is no Category found'}, 404
 
 class DeleteCategoryResource(Resource):
-    def post(self):
+    def post(self,categoryid):
         categoryData = request.get_json(force=True)
-        category = Category.query.filter_by(id = categoryData['Id']).first()
+        category = Category.query.filter_by(id = categoryid).first()
 
         if category is not None:
             db.session.delete(category)
