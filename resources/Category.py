@@ -32,3 +32,12 @@ class AddCategoryResource(Resource):
                     }
             except:
                 return {'message': 'Something went wrong'}, 500
+
+class CategoriesListResource(Resource):
+    def get(self):
+        categories = Category.query.all()
+        categories = categories_schema.dump(categories).data
+        if categories:
+            return {'status': 'success', 'data': categories}, 200
+        else:
+            return {'message': 'There is no categories found'}, 404  
