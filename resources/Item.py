@@ -59,3 +59,15 @@ class EditItemResource(Resource):
             return {'message': 'Item {} updated successfuly'.format(itemData['Title'])}, 200
         else:
             return {'message': 'There is no Item found'}, 404
+
+class DeleteItemResource(Resource):
+    def post(self,itemid):
+        itemData = request.get_json(force=True)
+        item = Item.query.filter_by(id = itemid).first()
+
+        if item is not None:
+            db.session.delete(item)
+            db.session.commit()
+            return {'message': 'Item {} deleted successfuly'.format(item.Title)}, 200
+        else:
+            return {'message': 'There is no Item found'}, 404
