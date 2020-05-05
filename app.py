@@ -9,8 +9,8 @@ api = Api(api_bp)
 # Route
 api.add_resource(AddCategoryResource, '/AddCategory')
 api.add_resource(CategoriesListResource, '/Categories')
-api.add_resource(EditCategoryResource, '/EditCategory')
-api.add_resource(DeleteCategoryResource, '/DeleteCategory')
+api.add_resource(EditCategoryResource, '/EditCategory/<categoryid>')
+api.add_resource(DeleteCategoryResource, '/DeleteCategory/<categoryid>')
 
 api.add_resource(AddItemResource, '/AddItem')
 api.add_resource(ItemsListResource, '/Items')
