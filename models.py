@@ -15,7 +15,7 @@ class Category(db.Model):
     Name = db.Column(db.String(150), unique=True, nullable=False)
     
     
-    item = relationship("Item", back_populates="Category")
+    item = relationship("Item", back_populates="category")
 
     def __init__(self, Name):
         self.Name = Name
@@ -36,15 +36,15 @@ class Item(db.Model):
     CreatedDate = db.Column(db.DateTime, nullable=False)
     ModifiedDate = db.Column(db.DateTime, nullable=False)
 
-    category = relationship('Category', back_populates="Item")   
+    category = relationship('Category', back_populates="item")   
 
-    def __init__(self, Title,Description,Ranking,Category_id,CreatedDate,ModifiedDate):
+    def __init__(self, Title,Description,Ranking,Category_id):
         self.Title = Title
         self.Description = Description
         self.Ranking = Ranking
         self.Category_id = Category_id
-        self.CreatedDate = CreatedDate
-        self.ModifiedDate = ModifiedDate
+        self.CreatedDate = datetime.datetime.now()
+        self.ModifiedDate = datetime.datetime.now()
 
 class ItemSchema(ma.Schema):
     id = fields.Integer()
