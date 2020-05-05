@@ -44,3 +44,18 @@ class ItemsListResource(Resource):
             return {'status': 'success', 'data': items}, 200
         else:
             return {'message': 'There is no items found'}, 404
+
+class EditItemResource(Resource):
+    def post(self,itemid):
+        itemData = request.get_json(force=True)
+        item = Item.query.filter_by(id = itemid).first()
+
+        if item is not None:
+            item.Title=itemData['Title'],
+            item.Description = itemData['Description'],
+            item.Ranking = itemData['Ranking'],
+            item.Category_id = itemData['Category_id']
+            db.session.commit()
+            return {'message': 'Item {} updated successfuly'.format(itemData['Title'])}, 200
+        else:
+            return {'message': 'There is no Item found'}, 404
