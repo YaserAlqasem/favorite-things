@@ -54,3 +54,21 @@ class ItemSchema(ma.Schema):
     Category_id = fields.Integer(required=True)
     CreatedDate = fields.DateTime()
     ModifiedDate = fields.DateTime()
+
+class Log(db.Model):
+    __tablename__ = 'Log'
+    id = db.Column(db.Integer, primary_key=True)
+    ActionName = db.Column(db.String(150), nullable=False)
+    Message = db.Column(db.String(150), nullable=False)
+    CreatedOn = db.Column(db.DateTime, nullable=False)
+    
+    def __init__(self, ActionName,Message):
+        self.ActionName = ActionName
+        self.Message = Message
+        self.CreatedOn = datetime.datetime.now()
+
+class LogSchema(ma.Schema):
+    id = fields.Integer()
+    ActionName = fields.String()
+    Message = fields.String()
+    CreatedOn = fields.DateTime()
