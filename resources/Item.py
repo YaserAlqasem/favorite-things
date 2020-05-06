@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from models import db, Item, ItemSchema
+from models import db, Item, ItemSchema,Log
 import datetime
 
 items_schema = ItemSchema(many=True)
@@ -29,6 +29,11 @@ class AddItemResource(Resource):
                 
             try:
                 db.session.add(item)
+                
+                log = Log(
+                    ActionName = request.path,
+                    Message = item.Title + " Item has been Added")
+                db.session.add(log)    
                 db.session.commit()
                 return {
                     'message': 'Item {} was created'.format(json_data['Title']),
@@ -56,6 +61,11 @@ class EditItemResource(Resource):
             item.Ranking = itemData['Ranking'],
             item.Category_id = itemData['Category_id']
             item.ModifiedDate = datetime.datetime.now()
+
+            log = Log(
+                ActionName = request.path,
+                Message = item.Title + " Item has been Edited")
+            db.session.add(log)
             db.session.commit()
             return {'message': 'Item {} updated successfuly'.format(itemData['Title'])}, 200
         else:
@@ -68,6 +78,10 @@ class DeleteItemResource(Resource):
 
         if item is not None:
             db.session.delete(item)
+            log = Log(
+                ActionName = request.path,
+                Message = item.Title + " Item has been Deleted")
+            db.session.add(log)
             db.session.commit()
             return {'message': 'Item {} deleted successfuly'.format(item.Title)}, 200
         else:
