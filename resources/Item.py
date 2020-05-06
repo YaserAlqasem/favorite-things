@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
 from models import db, Item, ItemSchema
-
+import datetime
 
 items_schema = ItemSchema(many=True)
 item_schema = ItemSchema()
@@ -55,6 +55,7 @@ class EditItemResource(Resource):
             item.Description = itemData['Description'],
             item.Ranking = itemData['Ranking'],
             item.Category_id = itemData['Category_id']
+            item.ModifiedDate = datetime.datetime.now()
             db.session.commit()
             return {'message': 'Item {} updated successfuly'.format(itemData['Title'])}, 200
         else:
