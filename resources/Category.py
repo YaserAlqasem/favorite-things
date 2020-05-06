@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from models import db, Category, CategorySchema
+from models import db, Category, CategorySchema,Log
 
 
 categories_schema = CategorySchema(many=True)
@@ -26,7 +26,12 @@ class AddCategoryResource(Resource):
                 
             try:
                 db.session.add(category)
-                db.session.commit()
+
+                log = Log(
+                    ActionName = request.path,
+                    Message = category.Name + " Category has been Added")
+                db.session.add(log)
+                db.session.commit()    
                 return {
                     'message': 'Category {} was created'.format(json_data['Name']),
                     }
@@ -49,6 +54,10 @@ class EditCategoryResource(Resource):
 
         if category is not None:
             category.Name = categoryData['Name']
+            log = Log(
+                ActionName = request.path,
+                Message = category.Name + " Category has been Edited")
+            db.session.add(log)
             db.session.commit()
             return {'message': 'Category {} updated successfuly'.format(categoryData['Name'])}, 200
         else:
@@ -61,6 +70,10 @@ class DeleteCategoryResource(Resource):
 
         if category is not None:
             db.session.delete(category)
+            log = Log(
+                ActionName = request.path,
+                Message = category.Name + " Category has been Deleted")
+            db.session.add(log)
             db.session.commit()
             return {'message': 'Category {} deleted successfuly'.format(category.Name)}, 200
         else:
